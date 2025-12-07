@@ -1,0 +1,12 @@
+
+version: 2
+
+models:
+  - name: stg_trades
+    description: "A dbt model containing trade information"
+    columns:
+      - name: trade_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null

@@ -1,0 +1,2 @@
+--create base table to pull columns and aggregate metrics from stage trade table
+--join to time table to pull date

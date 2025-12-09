@@ -38,3 +38,16 @@ models:
       trades:
         +materialized: view
         +schema: 'stg'
+      sides:
+        +materialized: view
+        +schema: 'stg'
+      products:
+        +materialized: view
+        +schema: 'stg'
+      time:
+        +materiazlized: view
+        +schema: 'stg'
+    marts:
+      trading:
+        +materialized: table
+        +schema: 'marts'

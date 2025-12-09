@@ -11,10 +11,9 @@ renamed as (
     select
         trade_id,
         sequence,
-        product_id,
-        side as side_name,
-        type as event_type_name,
-        time,
+        {{ dbt_utils.generate_surrogate_key(['product_id'])}} as product_id,
+        {{ dbt_utils.generate_surrogate_key(['side'])}} as side_key,
+        {{ dbt_utils.generate_surrogate_key(['time'])}} as time_key,
         cast(price as numeric) as price,
         cast(open_24h as numeric) as open_24h,
         cast(volume_24h as numeric) as volume_24h ,

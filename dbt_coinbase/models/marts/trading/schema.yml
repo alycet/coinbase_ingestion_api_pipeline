@@ -1,0 +1,242 @@
+version: 2
+
+models:
+  - name: fact_trades
+    description: "Fact table containing enriched Coinbase trade metrics including spreads, liquidity depth, and market pressure indicators."
+    columns:
+      - name: trade_id
+        description: "Unique identifier for each trade event."
+        tests:
+          - not_null
+          - unique
+
+      - name: sequence
+        description: "Sequence number from Coinbase used for ordering events."
+        tests:
+          - not_null
+
+      - name: product_id
+        description: "Surrogate key for product dimension (e.g., BTC-USD)."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+
+      - name: side_key
+        description: "Surrogate key for trade side dimension (buy/sell)."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_sides')
+                field: side_key
+
+      - name: time_key
+        description: "Surrogate key generated from timestamp + trade_id."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_time')
+                field: time_key
+
+      - name: price
+        description: "Last traded price."
+        tests:
+          - not_null
+
+      - name: best_bid
+        description: "Best bid price at the time of the event."
+
+      - name: best_ask
+        description: "Best ask price at the time of the event."
+
+      - name: bid_ask_spread
+        description: "Absolute difference between best ask and best bid."
+
+      - name: bid_ask_spread_pct
+        description: "Relative spread: (ask - bid) / midpoint."
+
+      - name: last_size
+        description: "Size of the last executed trade."
+
+      - name: best_bid_size
+        description: "Order book size at best bid."
+
+      - name: best_ask_size
+        description: "Order book size at best ask."
+
+      - name: liquidity_depth
+        description: "Total liquidity at the top of the book (bid + ask sizes)."
+
+      - name: bid_ask_strength_ratio
+        description: "Relative strength of bid vs ask liquidity."
+
+      - name: market_pressure_indicator
+        description: "Bid/ask size ratio indicating directional pressure."
+
+  - name: fact_agg_trades_daily
+    description: "Daily aggregated trading metrics including price statistics, volume measures, volatility, and buy/sell ratios."
+    columns:
+      - name: product_id
+        description: "Surrogate key for the product dimension."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+
+      - name: trade_date
+        description: "Date of the aggregated trades."
+
+      - name: average_price
+        description: "Average trade price for the day."
+
+      - name: min_price
+        description: "Lowest trade price for the day."
+
+      - name: max_price
+        description: "Highest trade price for the day."
+
+      - name: vol_weighted_avg_price
+        description: "Volume-weighted average price (VWAP)."
+
+      - name: total_trade_volume
+        description: "Total traded volume for the day."
+
+      - name: avg_trade_volume
+        description: "Average trade size."
+
+      - name: buy_volume
+        description: "Total buy-side volume."
+
+      - name: sell_volume
+        description: "Total sell-side volume."
+
+      - name: high_low_range
+        description: "Difference between the day's high and low prices."
+
+      - name: high_low_range_prcnt
+        description: "Percentage high-low range relative to the low price."
+
+      - name: trade_count
+        description: "Total number of trades for the day."
+
+      - name: trades_per_minute
+        description: "Average number of trades per minute."
+
+      - name: trades_per_hour
+        description: "Average number of trades per hour."
+
+      - name: buy_trade_count
+        description: "Number of buy-side trades."
+
+      - name: sell_trade_count
+        description: "Number of sell-side trades."
+
+      - name: buy_ratio
+        description: "Percentage of trades that were buys."
+
+      - name: buy_volume_ratio
+        description: "Percentage of total volume that was buy-side."
+
+      - name: sell_pressure_index
+        description: "Percentage of total volume that was sell-side."
+
+  - name: dim_products
+    description: "Product dimension table generated from distinct Coinbase product IDs, including base and quote currencies."
+    columns:
+      - name: product_id
+        description: "Surrogate key generated from product_name."
+        tests:
+          - not_null
+          - unique
+
+      - name: product_name
+        description: "Original product identifier (e.g., BTC-USD)."
+        tests:
+          - not_null
+
+      - name: base_currency
+        description: "Base asset extracted from product_name (e.g., BTC)."
+        tests:
+          - not_null
+
+      - name: quote_currency
+        description: "Quote asset extracted from product_name (e.g., USD)."
+        tests:
+          - not_null
+
+  - name: dim_sides
+    description: "Side dimension table generated from distinct buy/sell values in Coinbase ticker data."
+    columns:
+      - name: side_key
+        description: "Surrogate key generated from the side value."
+        tests:
+          - not_null
+          - unique
+
+      - name: side_name
+        description: "Original side value (e.g., 'buy', 'sell')."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['buy', 'sell']
+
+  - name: dim_time
+    description: "Time dimension table generated from Coinbase ticker timestamps, including date, time components, and calendar attributes."
+    columns:
+      - name: time_key
+        description: "Surrogate key generated from timestamp and trade_id."
+        tests:
+          - not_null
+          - unique
+
+      - name: trade_date
+        description: "Calendar date extracted from the timestamp."
+        tests:
+          - not_null
+
+      - name: trade_hour
+        description: "Hour of day (0–23) extracted from the timestamp."
+        tests:
+          - not_null
+
+      - name: trade_minute
+        description: "Minute of hour (0–59) extracted from the timestamp."
+        tests:
+          - not_null
+
+      - name: trade_second
+        description: "Second of minute (0–59) extracted from the timestamp."
+        tests:
+          - not_null
+
+      - name: trade_day_of_week
+        description: "Day of week name (e.g., Monday)."
+        tests:
+          - not_null
+
+      - name: trade_week
+        description: "ISO week number extracted from the date."
+        tests:
+          - not_null
+
+      - name: trade_month
+        description: "Month of year (1–12)."
+        tests:
+          - not_null
+
+      - name: trade_quarter
+        description: "Quarter of year (1–4)."
+        tests:
+          - not_null
+
+      - name: trade_year
+        description: "Year extracted from the date."
+        tests:
+          - not_null

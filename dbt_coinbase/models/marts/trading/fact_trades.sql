@@ -2,10 +2,10 @@
 with facts as (
     select 
         trade_id,
-        sequence,
         product_id,
         side_key,
         time_key,
+        sequence,
         price,
         best_bid,
         best_ask,

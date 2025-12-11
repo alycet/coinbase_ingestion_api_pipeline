@@ -23,7 +23,7 @@ async def stream_and_post():
         async with websockets.connect(uri) as websocket:
             subscribe_message = {
                 "type": "subscribe",
-                "channels": [{"name": "ticker", "product_ids": ["BTC-USD"]}]
+                "channels": [{"name": "ticker", "product_ids": ["BTC-USD", "ETH-USD", "XRP-USD"]}]
             }
             await websocket.send(json.dumps(subscribe_message))
             print("Subscribed to Coinbase WebSocket")

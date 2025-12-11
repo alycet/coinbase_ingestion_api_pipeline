@@ -31,22 +31,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dbt_coinbase:
-    # Config indicated by + and applies to all files under models/example/
-    example:
+    staging:   
       +materialized: view
-    staging:
-      trades:
-        +materialized: view
-        +schema: 'stg'
-      sides:
-        +materialized: view
-        +schema: 'stg'
-      products:
-        +materialized: view
-        +schema: 'stg'
-      time:
-        +materiazlized: view
-        +schema: 'stg'
+      +schema: 'stg'
     marts:
       trading:
         +materialized: table

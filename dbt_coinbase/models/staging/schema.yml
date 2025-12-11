@@ -1,12 +1,173 @@
-
 version: 2
 
 models:
   - name: stg_trades
-    description: "A dbt model containing trade information"
+    description: "Staging model for raw Coinbase ticker data with cleaned types and surrogate keys for product, side, and time dimensions."
     columns:
       - name: trade_id
-        description: "The primary key for this table"
-        data_tests:
+        description: "Unique trade identifier from Coinbase."
+        tests:
+          - not_null
           - unique
+
+      - name: sequence
+        description: "Sequence number used to order events."
+        tests:
+          - not_null
+
+      - name: product_id
+        description: "Surrogate key generated from the raw product_id field."
+        tests:
+          - not_null
+          - relationships:
+              arguments:          
+                to: ref('stg_products')
+                field: product_id
+
+      - name: side_key
+        description: "Surrogate key generated from the raw side field."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sides')
+                field: side_key
+
+      - name: time_key
+        description: "Surrogate key generated from timestamp + trade_id."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_time')
+                field: time_key
+
+      - name: price
+        description: "Last traded price."
+        tests:
+          - not_null
+
+      - name: open_24h
+        description: "Opening price 24 hours ago."
+
+      - name: volume_24h
+        description: "Trading volume over the last 24 hours."
+
+      - name: low_24h
+        description: "Lowest price in the last 24 hours."
+
+      - name: high_24h
+        description: "Highest price in the last 24 hours."
+
+      - name: volume_30d
+        description: "Trading volume over the last 30 days."
+
+      - name: best_bid
+        description: "Best bid price."
+
+      - name: best_bid_size
+        description: "Size at best bid."
+
+      - name: best_ask
+        description: "Best ask price."
+
+      - name: best_ask_size
+        description: "Size at best ask."
+
+      - name: last_size
+        description: "Size of the last executed trade."
+
+  - name: stg_products
+    description: "Product dimension table generated from distinct Coinbase product IDs, including base and quote currencies."
+    columns:
+      - name: product_id
+        description: "Surrogate key generated from product_name."
+        tests:
+          - not_null
+          - unique
+
+      - name: product_name
+        description: "Original product identifier (e.g., BTC-USD)."
+        tests:
+          - not_null
+
+      - name: base_currency
+        description: "Base asset extracted from product_name (e.g., BTC)."
+        tests:
+          - not_null
+
+      - name: quote_currency
+        description: "Quote asset extracted from product_name (e.g., USD)."
+        tests:
+          - not_null
+
+  - name: stg_sides
+    description: "Side dimension table generated from distinct buy/sell values in Coinbase ticker data."
+    columns:
+      - name: side_key
+        description: "Surrogate key generated from the side value."
+        tests:
+          - not_null
+          - unique
+
+      - name: side_name
+        description: "Original side value (e.g., 'buy', 'sell')."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['buy', 'sell']
+
+  - name: stg_time
+    description: "Time dimension table generated from Coinbase ticker timestamps, including date, time components, and calendar attributes."
+    columns:
+      - name: time_key
+        description: "Surrogate key generated from timestamp and trade_id."
+        tests:
+          - not_null
+          - unique
+
+      - name: trade_date
+        description: "Calendar date extracted from the timestamp."
+        tests:
+          - not_null
+
+      - name: trade_hour
+        description: "Hour of day (0–23) extracted from the timestamp."
+        tests:
+          - not_null
+
+      - name: trade_minute
+        description: "Minute of hour (0–59) extracted from the timestamp."
+        tests:
+          - not_null
+
+      - name: trade_second
+        description: "Second of minute (0–59) extracted from the timestamp."
+        tests:
+          - not_null
+
+      - name: trade_day_of_week
+        description: "Day of week name (e.g., Monday)."
+        tests:
+          - not_null
+
+      - name: trade_week
+        description: "ISO week number extracted from the date."
+        tests:
+          - not_null
+
+      - name: trade_month
+        description: "Month of year (1–12)."
+        tests:
+          - not_null
+
+      - name: trade_quarter
+        description: "Quarter of year (1–4)."
+        tests:
+          - not_null
+
+      - name: trade_year
+        description: "Year extracted from the date."
+        tests:
           - not_null

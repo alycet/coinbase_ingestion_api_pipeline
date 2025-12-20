@@ -12,3 +12,7 @@ final as (
 
 select * from final
 
+-- {% if is_incremental() %}
+--   where time > (select max(time) from {{ this }})
+-- {% endif %}
+

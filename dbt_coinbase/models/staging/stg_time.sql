@@ -14,3 +14,7 @@ with time_table as (
 )
 
 select * from time_table
+
+-- {% if is_incremental() %}
+--   where time > (select max(time) from {{ this }})
+-- {% endif %}

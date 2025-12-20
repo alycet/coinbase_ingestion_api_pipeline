@@ -1,0 +1,45 @@
+
+services:
+  fastapi:
+    build: ./fastapi
+    container_name: fastapi
+    ports:
+      - "8000:8000"
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: "/secrets/key.json"
+      DATABASE_URL: "sqlite:///database.db"
+    volumes:
+      - ./fastapi:/app
+      - ./secrets/key.json:/secrets/key.json
+
+  nifi:
+    build: ./apache_nifi
+    container_name: nifi
+    user: root
+    ports:
+      - "8443:8443"
+    environment:
+      - NIFI_WEB_HTTPS_PORT=8443
+      - GOOGLE_APPLICATION_CREDENTIALS=/secrets/key.json
+    volumes:
+      - ./dbt_coinbase:/opt/dbt
+      - ./secrets/key.json:/secrets/key.json
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./nifi/conf:/opt/nifi/nifi-current/conf
+      - ./nifi/flowfile_repository:/opt/nifi/nifi-current/flowfile_repository
+      - ./nifi/content_repository:/opt/nifi/nifi-current/content_repository
+      - ./nifi/provenance_repository:/opt/nifi/nifi-current/provenance_repository
+      - ./nifi/state:/opt/nifi/nifi-current/state
+    depends_on:
+      - fastapi
+      - dbt
+
+  dbt:
+    build: ./dbt_coinbase
+    container_name: dbt
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: "/secrets/key.json"
+    volumes:
+      - ./dbt_coinbase:/opt/dbt
+      - ./secrets/key.json:/secrets/key.json
+    command: ["sleep", "infinity"]  # keeps container running for manual dbt runs

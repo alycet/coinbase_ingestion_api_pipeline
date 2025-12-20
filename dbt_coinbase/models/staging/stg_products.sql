@@ -14,3 +14,8 @@ final_product_table as (
 )
 
 select * from final_product_table
+
+-- {% if is_incremental() %}
+--   where time > (select max(time) from {{ this }})
+-- {% endif %}
+

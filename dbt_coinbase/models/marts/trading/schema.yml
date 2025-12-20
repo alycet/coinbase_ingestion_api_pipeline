@@ -80,6 +80,11 @@ models:
   - name: fact_agg_trades_daily
     description: "Daily aggregated trading metrics including price statistics, volume measures, volatility, and buy/sell ratios."
     columns:
+      - name: row_id
+        description: "Surrogate key generated from product_id and trade date as a unique identifier for each row."
+        tests:
+          - not_null
+          - unique
       - name: product_id
         description: "Surrogate key for the product dimension."
         tests:

@@ -1,7 +1,3 @@
-{{ config(
-    materialized='table',
-    schema = 'stg'
-    ) }}
 
 with source as (
     select * from coinbase_data.ticker
@@ -30,3 +26,7 @@ renamed as (
 )
 
 select * from renamed
+
+-- {% if is_incremental() %}
+--   where time > (select max(time) from {{ this }})
+-- {% endif %}

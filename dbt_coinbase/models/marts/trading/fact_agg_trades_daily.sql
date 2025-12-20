@@ -14,6 +14,7 @@ with base as (
 
 daily_agg as (
     select 
+        {{dbt_utils.generate_surrogate_key(['product_id', 'trade_date'])}} as row_id,
         product_id,
         trade_date,
         --price measures
@@ -39,9 +40,9 @@ daily_agg as (
         sum(case when side_name = 'sell' then 1 else 0 end) as sell_trade_count,
         cast(sum(case when side_name = 'buy' then 1 else 0 end) as float64)/count(*) as buy_ratio,
         cast(sum(case when side_name = 'buy' then last_size else 0 end) as float64) / sum(last_size) as buy_volume_ratio,
-        cast(sum(case when side_name = 'sell' then last_size else 0 end) as float64) / sum(last_size) as sell_pressure_index,
+        cast(sum(case when side_name = 'sell' then last_size else 0 end) as float64) / sum(last_size) as sell_pressure_index
     from base
-    group by 1,2
+    group by 1,2,3
 
 )
 

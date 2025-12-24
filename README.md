@@ -1,6 +1,6 @@
 # Real-Time Crypto Analytics Pipeline
 
-This project implements a real-time data pipeline that ingests live bitcoin marke data from the Coinbase WebSocket API, stores it in Google BigQuery, transforms it using dbt, and visualizes insights through Power BI dashboards.
+This project implements a real-time data pipeline that ingests live crypto marke data from the Coinbase WebSocket API, stores it in Google BigQuery, transforms it using dbt, and visualizes insights through Power BI dashboards.
 
 ## 🚀 Overview
 

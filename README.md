@@ -1,7 +1,15 @@
 # Near–Real-Time Crypto Analytics Pipeline
----
+
 
 ## 📋 Table of Contents
+
+- [Overview](https://github.com/alycet/coinbase_ingestion_api_pipeline?tab=readme-ov-file#-overview)
+- [Architecture & Design Decisions](https://github.com/alycet/coinbase_ingestion_api_pipeline?tab=readme-ov-file#%EF%B8%8F-architecture--design-decisions)
+- [Technologies](https://github.com/alycet/coinbase_ingestion_api_pipeline?tab=readme-ov-file#%EF%B8%8F-technologies)
+- [Data Model & Layers](https://github.com/alycet/coinbase_ingestion_api_pipeline?tab=readme-ov-file#-data-model--layers)
+- [Dashboard Snapshot](https://github.com/alycet/coinbase_ingestion_api_pipeline?tab=readme-ov-file#-dashboard-snapshot)
+- [Getting Started](https://github.com/alycet/coinbase_ingestion_api_pipeline?tab=readme-ov-file#-getting-started)
+- [Future Enhancements](https://github.com/alycet/coinbase_ingestion_api_pipeline?tab=readme-ov-file#-future-enhancements)
 
 ---
 
@@ -26,12 +34,12 @@ This project implements a **near–real-time data pipeline** that ingests live c
 - **Near–Real-Time Analytics & Visualization**  
     Power BI dashboards consume transformed datasets to provide near–real-time visibility into crypto price movements, trading volumes, and market trends
 
-### Use Cases:
+### Potential Use Cases:
 
-    - Real-time crypto price monitoring
-    - Trade volume and liquidity analysis
-    - Market trend analysis
-    - Analytics-ready datasets for downstream reporting
+- Real-time crypto price monitoring
+- Trade volume and liquidity analysis
+- Market trend analysis
+- Analytics-ready datasets for downstream reporting
 
 ### Data Sources:
 
@@ -132,6 +140,8 @@ This structure supports performant querying, clear business logic, and maintaina
 ### 📊 Dashboard Snapshot
 
 ![Dashboard Snapshot](https://github.com/alycet/coinbase_ingestion_api_pipeline/blob/main/Coinbase_Market_Pulse_Dashboard.jpg)
+
+Note: The data for this dashboard was only generated continuously and was only for testing purposes. Therefore charts may not reflect truly accurate aggregateions.
 
 ---
 

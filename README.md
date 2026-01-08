@@ -181,7 +181,7 @@ Power BI dashboards can query the transformed BigQuery tables for near–real-ti
 ## 🔮 Future Enhancements
 
 - **Scalable Streaming Architecture**  
-  Introduce a message broker (e.g., Kafka or Pub/Sub) between FastAPI and BigQuery to handle higher throughput and distributed ingestion.
+  - Introduce a message broker (e.g., Kafka or Pub/Sub) between FastAPI and BigQuery to handle higher throughput and distributed ingestion.
 
 - **Data Quality & Reliability Improvements**  
   - Implement Dead Letter Queues (DLQs) for malformed or failed events.  

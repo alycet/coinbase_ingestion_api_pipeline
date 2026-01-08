@@ -141,7 +141,7 @@ This structure supports performant querying, clear business logic, and maintaina
 
 ![Dashboard Snapshot](https://github.com/alycet/coinbase_ingestion_api_pipeline/blob/main/Coinbase_Market_Pulse_Dashboard.jpg)
 
-Note: The data for this dashboard was only generated continuously and was only for testing purposes. Therefore charts may not reflect truly accurate aggregateions.
+**Note**: This dashboard is based on test data collected during development and may not represent continuously ingested data. Aggregate values are provided for demonstration purposes only.
 
 ---
 

@@ -28,16 +28,14 @@ This project implements a **near–real-time data pipeline** that ingests live c
 
 ### Use Cases:
 
-    -Real-time crypto price monitoring
-    -Trade volume and liquidity analysis
-    -Market trend analysis
-    -Analytics-ready datasets for downstream reporting
+    - Real-time crypto price monitoring
+    - Trade volume and liquidity analysis
+    - Market trend analysis
+    - Analytics-ready datasets for downstream reporting
 
 ### Data Sources:
 
-## 🧾 Data Sources
-
-### Coinbase WebSocket API
+#### Coinbase WebSocket API
 
 This pipeline consumes live cryptocurrency market data from the **Coinbase WebSocket API**, which provides real-time event-driven updates for active trading pairs.
 
@@ -129,7 +127,6 @@ This structure supports performant querying, clear business logic, and maintaina
 
 ![Data Model](https://github.com/alycet/coinbase_ingestion_api_pipeline/blob/main/Coinbase_Market_Dimensional_Model.jpeg)
 
-
 ---
 
 ### 📊 Dashboard Snapshot
@@ -168,6 +165,7 @@ The FastAPI container automatically streams Coinbase market data into SQLite as 
 NiFi schedules batch loads from SQLite to BigQuery and triggers dbt models to transform the data
 
 Power BI dashboards can query the transformed BigQuery tables for near–real-time analytics
+
 ---
 
 ## 🔮 Future Enhancements
